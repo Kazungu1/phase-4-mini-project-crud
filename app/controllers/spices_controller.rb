@@ -1,7 +1,7 @@
 class SpicesController < ApplicationController
   def index
-    spice = Spice.all
-    render json: spice
+    spices = Spice.all
+    render json: spices
   end
 
   def create
@@ -9,29 +9,23 @@ class SpicesController < ApplicationController
     render json: spice, status: :created
   end
 
-  # GET /birds/:id
-  def show
-    spice = Spice.find_by(id: params[:id])
-    if spice
-      render json: spice
-    else
-      render json: { error: "Spice not found" }, status: :not_found
-    end
-  end
-
   def update
-    spice = Spice.find_by(id: params[:id])
+    spice = find_spice
     spice.update(spice_params)
     render json: spice
   end
 
   def destroy
-    spice = Spice.find_by(id: params[:id])
+    spice = find_spice
     spice.destroy
     head :no_content
   end
 
   private
+
+  def find_spice
+    Spice.find(params[:id])
+  end
 
   def spice_params
     params.permit(:title, :image, :description, :notes, :rating)
